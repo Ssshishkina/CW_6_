@@ -22,6 +22,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "users",
+    "rest_framework",
+    "blog",
+    "newsletter",
 ]
 
 MIDDLEWARE = [
@@ -93,13 +96,18 @@ USE_TZ = True
 
 
 STATIC_URL = "static/"
+STATICFILES_DIRS = (BASE_DIR / 'static',)
 
-MEDIA_URL = "media/"
+MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = 'users.User'
+
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/users/'
 
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
@@ -107,3 +115,19 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')      #указываем свою
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')        #указываем пароль для ПРИЛОЖЕНИЯ!!! а НЕ почты!!!
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
+
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# настройка кеширования
+CACHE_ENABLED = os.getenv('CACHE_ENABLED') == 'True'
+# если уст-но False, значит мы работаем локально и кешировать ничего не нужно
+
+
+if CACHE_ENABLED:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": os.getenv('CACHE_LOCATION'),
+        }
+    }
