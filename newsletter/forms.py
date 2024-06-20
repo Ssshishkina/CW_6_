@@ -4,36 +4,29 @@ from newsletter.models import Client, Newsletter, Message
 
 
 class StyleFormMixin:
-    '''Класс стилизации формы'''
+    '''Класс стилизации формы.'''
     def __init__(self, *args, **kwargs):
         '''Функция стилизации формы'''
         super().__init__(*args, **kwargs)
 
         for field_name, field in self.fields.items():
-            if field_name == 'is_active':
-                field.widget.attrs['class'] = 'form-check-input'
-            else:
-                field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['class'] = 'form-control'
 
 
 class ClientForm(StyleFormMixin, forms.ModelForm):
+    '''Форма заполнения при создании/редактировании Клиента сервиса.'''
     class Meta:
         model = Client
+        fields = '__all__'
         exclude = ('owner',)
 
 
 class NewsletterForm(StyleFormMixin, forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request')
-        user = self.request.user
-        super().__init__(*args, **kwargs)
-        self.fields['client'].queryset = Client.objects.filter(owner=user)
-        self.fields['message'].queryset = Message.objects.filter(owner=user)
-
+    '''Форма заполнения при создании/редактировании Рассылки.'''
     class Meta:
         model = Newsletter
-        exclude = ('date_next', 'is_active', 'owner')
+        fields = '__all__'
+        exclude = ('date_next', 'owner')
 
         widgets = {
             'start_date': DateTimeInput(attrs={'placeholder': 'ДД.ММ.ГГГГ ЧЧ:ММ:СС', 'type': 'datetime-local'}),
@@ -42,6 +35,8 @@ class NewsletterForm(StyleFormMixin, forms.ModelForm):
 
 
 class MessageForm(StyleFormMixin, forms.ModelForm):
+    '''Форма заполнения при создании/редактировании
+    Сообщения для рассылки.'''
     class Meta:
         model = Message
-        exclude = ('owner',)
+        fields = '__all__'

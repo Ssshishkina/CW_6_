@@ -4,7 +4,8 @@ from newsletter.forms import StyleFormMixin
 
 
 class BlogForm(StyleFormMixin, forms.ModelForm):
-    '''Класс стилизации формы Блога.'''
+    '''Класс стилизации формы Блога. Форма заполнения
+    при создании/редактировании Публикации.'''
     class Meta:
         model = Blog
-        exclude = ('preview',)
+        fields = '__all__'

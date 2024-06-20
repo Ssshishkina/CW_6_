@@ -19,7 +19,7 @@ class MessageAdmin(admin.ModelAdmin):
 
 
 @admin.register(Newsletter)
-class MailingAdmin(admin.ModelAdmin):
+class NewsletterAdmin(admin.ModelAdmin):
     '''Класс рассылки сервиса в админке.'''
     list_display = ('pk', 'name', 'started', 'is_active',)
     list_filter = ('name',)
